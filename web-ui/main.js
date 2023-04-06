@@ -375,12 +375,12 @@ function renderConversion(inst, abi=false) {
     // Handle tooltip for binary div
     for (let key in binDivList) {
       let binDiv = binDivList[key];
-      binDiv.addEventListener("mouseover", () => {        
+      binDiv.addEventListener("mouseover", () => {
         binDivMouseHandle(binDiv, binDivList, true, asmDiv);
       })
 
       // Remove highlight if hover out
-      binDiv.addEventListener("mouseout", () => {        
+      binDiv.addEventListener("mouseout", () => {
         binDivMouseHandle(binDiv, binDivList, false, asmDiv);
       });
     }
@@ -422,7 +422,7 @@ function renderError(error) {
   errorTitle.textContent = 'Error = '
 
   let errorData = document.createElement('div')
-  errorData.classList.add('result-row');
+  errorData.id = "error-row";
   errorData.style.color = 'var(--color-red)';
   errorData.textContent = error;
 
