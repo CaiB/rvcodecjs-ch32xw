@@ -349,10 +349,6 @@ body {
     margin-right: 0.12rem;
 }
 
-.binary-fragment {
-    position: relative;
-}
-
 /* Binary tooltip conversion */
 .binary-tooltip {
     visibility: hidden;
@@ -365,10 +361,6 @@ body {
 
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
-    top: 110%;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 /*css the copy-button and the row-data*/

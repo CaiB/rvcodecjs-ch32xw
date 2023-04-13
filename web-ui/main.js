@@ -302,7 +302,8 @@ function renderConversion(inst, abi=false) {
   let subHighlight = "var(--color-hl)";
 
   // Handle tooltip highlight for binary fragment. Info label only appears when showLabel is set true
-  let tooltipBinaryDisplay = (binDiv, isDisplay, showLabel = false) => {
+  // Pass the event as parameter to detect the tooltip position on the screen using 'client'
+  let tooltipBinaryDisplay = (binDiv, isDisplay, showLabel = false, event = null) => {
     // Set the options based on isDisplay
     let visibility = (isDisplay && showLabel)?"visible":"hidden";
     let backgroundColor = (isDisplay)?((showLabel)?superHighlight:subHighlight):"inherit";
@@ -315,14 +316,23 @@ function renderConversion(inst, abi=false) {
         // Handle binary tooltip
         else if (child.classList.contains("binary-tooltip")) {
           child.style.visibility = visibility;
+
+          // If the binary tooltip is pointed, display the information at the cursor
+          if (visibility == "visible") {
+            const x = event.clientX + 10;
+            const y = event.clientY + 10;
+            child.style.left = x + "px";
+            child.style.top = y + "px";
+          }
         }
       }
     });
   }
 
-  let binDivMouseHandle = (binDiv, binDivList, isMouseOver, asmDiv = null) => {
+    // Pass the event as parameter to detect the tooltip position on the screen using 'client'
+  let binDivMouseHandle = (binDiv, binDivList, isMouseOver, asmDiv = null, event = null) => {
     // Super highlighted for binary div
-    tooltipBinaryDisplay(binDiv, isMouseOver, true);
+    tooltipBinaryDisplay(binDiv, isMouseOver, true, event);
 
     // Light highlighted for ASM div and other binary div
     if (asmDiv !== null)
@@ -331,7 +341,7 @@ function renderConversion(inst, abi=false) {
     for (let otherKey in binDivList) {
       let otherBinDiv = binDivList[otherKey];
       if (otherBinDiv !== binDiv) {
-        tooltipBinaryDisplay(otherBinDiv, isMouseOver, false);
+        tooltipBinaryDisplay(otherBinDiv, isMouseOver, false, event);
       }
     }
   }
@@ -354,7 +364,7 @@ function renderConversion(inst, abi=false) {
       delete binDivList[0];
 
       // Handle tooltip for ASM div
-      asmDiv.addEventListener("mouseover", () => {
+      asmDiv.addEventListener("mousemove", () => {
         tooltipAsmDisplay(asmDiv, true, true);
         // Only highlight binary bits, but not show info label
         for (let key in binDivList) {
@@ -375,8 +385,8 @@ function renderConversion(inst, abi=false) {
     // Handle tooltip for binary div
     for (let key in binDivList) {
       let binDiv = binDivList[key];
-      binDiv.addEventListener("mouseover", () => {
-        binDivMouseHandle(binDiv, binDivList, true, asmDiv);
+      binDiv.addEventListener("mousemove", (event) => {
+        binDivMouseHandle(binDiv, binDivList, true, asmDiv, event);
       })
 
       // Remove highlight if hover out
