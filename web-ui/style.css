@@ -29,6 +29,7 @@
     --color-hl: var(--color-base2);
     --color-em: var(--color-base01);
     --color-co: var(--color-base1);
+    --color-fd: var(--color-base2);
 }
 
 /* Dark colorscheme */
@@ -39,6 +40,7 @@
         --color-hl: var(--color-base02);
         --color-em: var(--color-base1);
         --color-co: var(--color-base01);
+        --color-fd: var(--color-base01);
     }
 }
 
@@ -449,7 +451,7 @@ body {
 
 /* Close button */
 #close {
-    color: var(--color-co);
+    color: var(--color-em);
     position: absolute;
     bottom: 15px;
     right: 15px;
@@ -457,7 +459,7 @@ body {
 }
 
 #close:hover {
-    color: var(--color-em);
+    color: var(--color-yellow);
     cursor: pointer;
 }
 
@@ -482,7 +484,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--color-fg);
     -webkit-transition: .3s;
     transition: .3s;
 }
@@ -500,11 +502,11 @@ body {
 }
 
 input:checked + .slider {
-    background-color: var(--color-em);
+    background-color: var(--color-yellow);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px var(--color-em);
+    box-shadow: 0 0 1px var(--color-yellow);
 }
 
 input:checked + .slider:before {
