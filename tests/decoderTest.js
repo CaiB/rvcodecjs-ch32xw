@@ -9,16 +9,16 @@ import { COPTS_ISA } from '../core/Config.js';
 function dec_rv32i_lui_lui() {
     let inst = new Instruction('876541B7');
     let instAbi = new Instruction('876541B7', { ABI:true });
-    assertEq(inst.asm, 'lui x3, -2023407616');
-    assertEq(instAbi.asm, 'lui gp, -2023407616');
+    assertEq(inst.asm, 'lui x3, -493996');
+    assertEq(instAbi.asm, 'lui gp, -493996');
 }
 
 // AUIPC
 function dec_rv32i_auipc_auipc() {
     let inst = new Instruction('00000000000000011110001010010111');
     let instAbi = new Instruction('00000000000000011110001010010111', { ABI:true });
-    assertEq(inst.asm, 'auipc x5, 122880');
-    assertEq(instAbi.asm, 'auipc t0, 122880');
+    assertEq(inst.asm, 'auipc x5, 30');
+    assertEq(instAbi.asm, 'auipc t0, 30');
 }
 
 // JAL
@@ -511,10 +511,10 @@ function dec_rv32c_c1ci_caddi16sp() {
 }
 
 function dec_rv32c_c1ci_clui() {
-    let inst = new Instruction('0111000010010101');
-    let instAbi = new Instruction('0111000010010101', { ABI:true });
-    assertEq(inst.asm, 'c.lui x1, -110592');
-    assertEq(instAbi.asm, 'c.lui ra, -110592');
+    let inst = new Instruction('0110000010110101');
+    let instAbi = new Instruction('0110000010110101', { ABI:true });
+    assertEq(inst.asm, 'c.lui x1, 13');
+    assertEq(instAbi.asm, 'c.lui ra, 13');
 }
 
 function dec_rv32c_c1cb_csrli() {
