@@ -561,8 +561,8 @@ export const ISA_C = {
 
 // Integer Computational Instructions
   // Integer Constant-Generator Instructions
-  'c.li':       { isa: 'C', xlens: 0b111, fmt: 'CI-type', funct3: '010', rdRs1Mask: 0b10, rdRs1Excl: [0],                immBits: [[5],  [[4,0]]],   opcode: C_OPCODE.C1 },
-  'c.lui':      { isa: 'C', xlens: 0b111, fmt: 'CI-type', funct3: '011', rdRs1Mask: 0b10, rdRs1Excl: [0,2], nzimm: true, immBits: [[17], [[16,12]]], opcode: C_OPCODE.C1 },
+  'c.li':       { isa: 'C', xlens: 0b111, fmt: 'CI-type', funct3: '010', rdRs1Mask: 0b10, rdRs1Excl: [0],                immBits: [[5], [[4,0]]],                                   opcode: C_OPCODE.C1 },
+  'c.lui':      { isa: 'C', xlens: 0b111, fmt: 'CI-type', funct3: '011', rdRs1Mask: 0b10, rdRs1Excl: [0,2], nzimm: true, immBits: [[5], [[4,0]]], immBitsLabels: [[17], [[16,12]]], opcode: C_OPCODE.C1 },
 
   // Integer Register-Immediate Operations
   'c.addi':     { isa: 'C', xlens: 0b111, fmt: 'CI-type', funct3: '000', rdRs1Mask: 0b11, rdRs1Excl: [0], nzimm: true,             immBits: [[5], [[4,0]]],       opcode: C_OPCODE.C1 },
