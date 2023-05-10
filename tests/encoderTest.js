@@ -6,16 +6,16 @@ import { Instruction } from '../core/Instruction.js';
  */
 // LUI
 function enc_rv32i_lui_lui() {
-    let inst = new Instruction('lui x17, 20037632');
-    let abiInst = new Instruction('lui a7, 0x0131c000');
-    assertEq(inst.hex, '0131c8b7');
+    let inst = new Instruction('lui x17, 116088');
+    let abiInst = new Instruction('lui a7, 0x1c578');
+    assertEq(inst.hex, '1c5788b7');
     assertEq(abiInst.hex, inst.hex);
 }
 
 // AUIPC
 function enc_rv32i_auipc_auipc() {
-    let inst = new Instruction('auipc x3, -1352077312');
-    let abiInst = new Instruction('auipc gp, 0xaf68f000');
+    let inst = new Instruction('auipc x3, -330097');
+    let abiInst = new Instruction('auipc gp, 0xaf68f');
     assertEq(inst.bin, '10101111011010001111000110010111');
     assertEq(abiInst.bin, inst.bin);
 }
@@ -496,8 +496,8 @@ function enc_rv32c_c1ci_caddi16sp() {
 }
 
 function enc_rv32c_c1ci_clui() {
-    let inst = new Instruction('c.lui x1, -110592');
-    let instAbi = new Instruction('c.lui ra, -110592');
+    let inst = new Instruction('c.lui x1, -27');
+    let instAbi = new Instruction('c.lui ra, 0b100101');
     assertEq(inst.bin, '0111000010010101');
     assertEq(instAbi.bin, inst.bin);
 }

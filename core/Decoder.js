@@ -883,13 +883,8 @@ export class Decoder {
     const imm_31_12 = getBits(this.#bin, FIELDS.u_imm_31_12.pos);
     const rd = getBits(this.#bin, FIELDS.rd.pos);
 
-    // Construct full 32-bit immediate value
-    // - Upper 20 bits of encoded as immediate field in instruction
-    // - Lower 12 bits set to 0
-    const imm = imm_31_12 + ''.padStart(12, '0');
-
     // Convert fields to string representations
-    const immediate = decImm(imm), dest = decReg(rd);
+    const immediate = decImm(imm_31_12), dest = decReg(rd);
 
     // Determine operation
     this.#mne = (this.#opcode === OPCODE.AUIPC) ? 'auipc' : 'lui';
@@ -899,11 +894,10 @@ export class Decoder {
       opcode:     new Frag(FRAG.OPC, this.#mne, this.#opcode, FIELDS.opcode.name),
       rd:         new Frag(FRAG.RD, dest, rd, FIELDS.rd.name),
       imm_31_12:  new Frag(FRAG.IMM, immediate, imm_31_12, FIELDS.u_imm_31_12.name),
-      imm:        new Frag(FRAG.IMM, immediate, imm, FIELDS.u_imm_31_12.name),
     };
 
     // Assembly fragments in order of instruction
-    this.asmFrags.push(f['opcode'], f['rd'], f['imm']);
+    this.asmFrags.push(f['opcode'], f['rd'], f['imm_31_12']);
 
     // Binary fragments from MSB to LSB
     this.binFrags.push(f['imm_31_12'], f['rd'], f['opcode']);
@@ -1305,20 +1299,23 @@ export class Decoder {
       funct3: new Frag(FRAG.OPC, this.#mne, funct3, FIELDS.c_funct3.name),
     };
 
-    // Create and append custom fragments
+    // Create and append custom register fragments
     const dynamicRdRs1 = inst.rdRs1Val === undefined;
-    const dynamicImm = inst.immVal === undefined;
     if (dynamicRdRs1) {
       f['rd_rs1'] = new Frag(FRAG.RD, destSrc1, rdRs1, destSrc1Name);
     } else {
       f['rd_rs1'] = new Frag(FRAG.OPC, this.#mne, rdRs1, 'static-' + destSrc1Name);
     }
+
+    // Create and append custom immediate fragments
+    const immBitsLabels = inst.immBitsLabels ?? inst.immBits;
+    const dynamicImm = inst.immVal === undefined;
     if (dynamicImm) {
-      f['imm0'] = new Frag(FRAG.IMM, immVal, imm0, immName + immBitsToString(inst.immBits[0]));
-      f['imm1'] = new Frag(FRAG.IMM, immVal, imm1, immName + immBitsToString(inst.immBits[1]));
+      f['imm0'] = new Frag(FRAG.IMM, immVal, imm0, immName + immBitsToString(immBitsLabels[0]));
+      f['imm1'] = new Frag(FRAG.IMM, immVal, imm1, immName + immBitsToString(immBitsLabels[1]));
     } else {
-      f['imm0'] = new Frag(FRAG.OPC, this.#mne, imm0, 'static-' + immName + immBitsToString(inst.immBits[0]));
-      f['imm1'] = new Frag(FRAG.OPC, this.#mne, imm1, 'static-' + immName + immBitsToString(inst.immBits[1]));
+      f['imm0'] = new Frag(FRAG.OPC, this.#mne, imm0, 'static-' + immName + immBitsToString(immBitsLabels[0]));
+      f['imm1'] = new Frag(FRAG.OPC, this.#mne, imm1, 'static-' + immName + immBitsToString(immBitsLabels[1]));
     }
 
     // Assembly fragments in order of instruction
