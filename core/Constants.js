@@ -709,7 +709,7 @@ export const ISA_BRANCH = {
   [ISA_RV32I['bne'].funct3]:  'bne',
   [ISA_RV32I['blt'].funct3]:  'blt',
   [ISA_RV32I['bge'].funct3]:  'bge',
-  [ISA_RV32I['bltu'].funct3]: 'btlu',
+  [ISA_RV32I['bltu'].funct3]: 'bltu',
   [ISA_RV32I['bgeu'].funct3]: 'bgeu',
 }
 
