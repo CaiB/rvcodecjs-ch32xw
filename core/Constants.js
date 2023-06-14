@@ -525,8 +525,8 @@ export const ISA_C = {
   // CH32V003 Custom XW extension
   'xw.c.lbu': { isa: 'XW', xlens: 0b001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
   'xw.c.sb':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
-  'xw.c.lhu': { isa: 'XW', xlens: 0x001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[1,[5,4]], [[3,2]]], opcode: C_OPCODE.C2 },
-  'xw.c.sh':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[1,[5,4]], [[3,2]]], opcode: C_OPCODE.C2 },
+  'xw.c.lhu': { isa: 'XW', xlens: 0x001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
+  'xw.c.sh':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
 
 // Load and Store Instructions
   // Stack-Pointer Based Loads and Stores
