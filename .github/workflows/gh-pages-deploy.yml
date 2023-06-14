@@ -21,11 +21,13 @@ jobs:
       
       - name: Update subtree files
         run: |
-          rm -rf public/*
-          cp -r core public
-          cp -r web-ui/* public
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./public/main.js
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./public/completion.js
+          pushd public
+          git rm -r *
+          cp -r ../core .
+          cp -r ../web-ui/* .
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./main.js
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./completion.js
+          popd
     
       - name: Commit back to repository
         run: |
