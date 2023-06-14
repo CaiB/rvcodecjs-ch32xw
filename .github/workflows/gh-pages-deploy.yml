@@ -22,6 +22,7 @@ jobs:
       - name: Update file layout
         run: |
           mkdir docs
+          echo 'xw.macyler.moe' > CNAME
           cp -r core docs
           cp -r web-ui/* docs
           sed -i -e 's/\.\.\/core\//\.\/core\//g' ./docs/main.js
