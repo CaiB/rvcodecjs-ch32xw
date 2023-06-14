@@ -31,7 +31,7 @@ jobs:
         with:
           commit_message: "Update GitHub Pages"
           commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-          branch: gh-actions
+          branch: gh-pages
           skip_fetch: true
           skip_checkout: true
           push_options: '--force'
