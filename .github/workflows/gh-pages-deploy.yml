@@ -19,22 +19,20 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
       
-      - name: Update subtree files
+      - name: Update file layout
         run: |
-          pushd public
-          git rm -r *
-          cp -r ../core .
-          cp -r ../web-ui/* .
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./main.js
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./completion.js
-          popd
+          mkdir docs
+          cp -r core docs
+          cp -r web-ui/* docs
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./docs/main.js
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./docs/completion.js
     
       - name: Commit back to repository
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          pushd public
-          git add --all
-          git commit -m "GitHub Pages Deployment"
-          git push origin gh-pages --force
-          popd
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update GitHub Pages"
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+          branch: gh-pages
+          skip_fetch: true
+          skip_checkout: true
+          push_options: '--force'
