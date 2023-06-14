@@ -19,7 +19,7 @@ jobs:
           ref: ${{ github.ref_name }}
       
       - name: Update file layout
-        script: |
+        run: |
           cp -r web-ui/* .
           sed -i -e 's/\.\.\/core\//\.\/core\//g' ./main.js
           sed -i -e 's/\.\.\/core\//\.\/core\//g' ./completion.js
