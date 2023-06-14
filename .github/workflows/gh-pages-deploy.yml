@@ -19,9 +19,9 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
       
-      - name: Update file layout
+      - name: Update subtree files
         run: |
-          mkdir public
+          rm -rf public/*
           cp -r core public
           cp -r web-ui/* public
           sed -i -e 's/\.\.\/core\//\.\/core\//g' ./public/main.js
