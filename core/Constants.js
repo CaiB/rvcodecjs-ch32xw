@@ -125,6 +125,8 @@ export const FIELDS = {
   c_funct2:     { pos: [6, 2],   name: 'funct2' },
   c_funct2_cb:  { pos: [11, 2],  name: 'funct2' },
 
+  xwc_funct5:   { pos: [15, 5],  name: 'funct5' },
+
   // ISA_C: registers
   c_rd:             { pos: [11, 5],  name: 'rd' },
   c_rs1:            { pos: [11, 5],  name: 'rs1' },
@@ -150,6 +152,8 @@ export const FIELDS = {
   c_imm_cj:     { pos: [12, 11], name: 'imm' },
   c_shamt_0:    { pos: [12, 1],  name: 'shamt' },
   c_shamt_1:    { pos: [6, 5],   name: 'shamt' },
+
+  xwc_imm_ls4:  { pos: [10, 4],  name: 'imm' },
 }
 
 
@@ -524,9 +528,15 @@ export const ISA_Q = {
 export const ISA_C = {
   // CH32V003 Custom XW extension
   'xw.c.lbu': { isa: 'XW', xlens: 0b001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
-  'xw.c.sb':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
-  'xw.c.lhu': { isa: 'XW', xlens: 0x001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
-  'xw.c.sh':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
+  'xw.c.sb':  { isa: 'XW', xlens: 0b001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
+  'xw.c.lhu': { isa: 'XW', xlens: 0b001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
+  'xw.c.sh':  { isa: 'XW', xlens: 0b001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[[5,3]], [[2,1]]], opcode: C_OPCODE.C2 },
+
+  'xw.c.lbusp': { isa: 'XW', xlens: 0b001, fmt: 'XWSP-type', xwc_funct5: '10000', funct2: '00', uimm: true, immBits: [[3,0]], opcode: C_OPCODE.C0 },
+  'xw.c.sbsp':  { isa: 'XW', xlens: 0b001, fmt: 'XWSP-type', xwc_funct5: '10000', funct2: '10', uimm: true, immBits: [[3,0]], opcode: C_OPCODE.C0 },
+  'xw.c.lhusp': { isa: 'XW', xlens: 0b001, fmt: 'XWSP-type', xwc_funct5: '10000', funct2: '01', uimm: true, immBits: [[3,1],4], opcode: C_OPCODE.C0 },
+  'xw.c.shsp':  { isa: 'XW', xlens: 0b001, fmt: 'XWSP-type', xwc_funct5: '10000', funct2: '11', uimm: true, immBits: [[3,1],4], opcode: C_OPCODE.C0 },
+
 
 // Load and Store Instructions
   // Stack-Pointer Based Loads and Stores
@@ -990,10 +1000,19 @@ function xlenLookupGen(...instNames) {
 // C0 Instruction order of lookup
 // - funct3
 // - xlen
+// - funct5
+// - funct2
 export const ISA_C0 = {
   [ISA_C['c.addi4spn'].funct3]: 'c.addi4spn',
   [ISA_C['xw.c.lbu'].funct3]: 'xw.c.lbu',
   [ISA_C['xw.c.sb'].funct3]: 'xw.c.sb',
+  [ISA_C['xw.c.lbusp'].xwc_funct5.substring(0,3)]: { [XLEN_MASK.rv32]: {
+    [ISA_C['xw.c.lbusp'].xwc_funct5]: {
+      [ISA_C['xw.c.lbusp'].funct2]: 'xw.c.lbusp',
+      [ISA_C['xw.c.sbsp'].funct2]:  'xw.c.sbsp',
+      [ISA_C['xw.c.lhusp'].funct2]: 'xw.c.lhusp',
+      [ISA_C['xw.c.shsp'].funct2]:  'xw.c.shsp',
+  }}},
   //[ISA_C['c.fld'].funct3]:  xlenLookupGen('c.fld', 'c.lq'),
   [ISA_C['c.lw'].funct3]:   'c.lw',
   [ISA_C['c.flw'].funct3]:  xlenLookupGen('c.flw', 'c.ld'),

@@ -236,6 +236,9 @@ export class Decoder {
         case 'CJ':
           this.#decodeCJ(inst);
           break;
+        case 'XWSP':
+          this.#decodeXWSP(inst);
+          break;
         default:
           throw `Internal error: Detected ${this.#mne} in quadrant ${quadrant} but could not match instruction format`;
       }
@@ -1062,9 +1065,17 @@ export class Decoder {
     // C0 Instruction order of lookup
     // - funct3
     // - xlen
+    // - xwc_funct5
+    // - funct2 ??? I do not understand this code at all
     this.#mne = ISA_C0[fields['funct3']];
     if (typeof this.#mne === 'object') {
       this.#mne = this.#mne[this.#xlens] ?? this.#mne[XLEN_MASK.all];
+      if (typeof this.#mne === 'object') {
+        this.#mne = this.#mne[fields['xwc_funct5']] ?? this.#mne['default'];
+        if (typeof this.#mne === 'object') {
+          this.#mne = this.#mne[fields['funct2']];
+        }
+      }
     }
 
     // Find and return instruction
@@ -1465,6 +1476,44 @@ export class Decoder {
       f['imm1'], f['rd_prime'], f['opcode']);
   }
 
+  #decodeXWSP(inst) {
+    // Get fields
+    const funct5   = getBits(this.#bin, FIELDS.xwc_funct5.pos);
+    const imm     = getBits(this.#bin, FIELDS.xwc_imm_ls4.pos);
+    const funct2   = getBits(this.#bin, FIELDS.c_funct2.pos);
+    const rdPrime  = getBits(this.#bin, FIELDS.c_rd_prime.pos);
+    const opcode   = getBits(this.#bin, FIELDS.c_opcode.pos);
+
+    // Determine name for immediate
+    let immName = '';
+    if (inst.uimm) {
+      immName += 'u';
+    }
+    immName += FIELDS.xwc_imm_ls4.name;
+
+    // Prepend bits to compressed register fields
+    const rd  = '01' + rdPrime;
+
+    // Convert fields to string representations
+    const reg   = decReg(rd);
+    const offset = decImmBits(imm, inst.immBits, inst.uimm);
+
+    // Create fragments
+    const f = {
+      opcode:    new Frag(FRAG.OPC, this.#mne, this.#opcode, FIELDS.c_opcode.name),
+      rd_prime:  new Frag(FRAG.RD, reg, rdPrime, FIELDS.c_rd_prime.name),
+      funct5:    new Frag(FRAG.OPC, this.#mne, funct5, FIELDS.xwc_funct5.name),
+      funct2:    new Frag(FRAG.OPC, this.#mne, funct2, FIELDS.c_funct2.name),
+      imm:       new Frag(FRAG.IMM, offset, imm, immName + immBitsToString(inst.immBits)),
+    };
+
+    // Assembly fragments in order of instruction
+    this.asmFrags.push(f['opcode'], f['rd_prime'], f['imm']);
+
+    // Binary fragments from MSB to LSB
+    this.binFrags.push(f['funct5'], f['imm'], f['funct2'], f['rd_prime'], f['opcode']);
+  }
+
   /**
    * Decodes CS-type instruction
    */
@@ -1750,6 +1799,7 @@ function extractCLookupFields(binary) {
     'funct2_cb': getBits(binary, FIELDS.c_funct2_cb.pos),
     'rd_rs1': getBits(binary, FIELDS.c_rd_rs1.pos),
     'rs2': getBits(binary, FIELDS.c_rs2.pos),
+    'xwc_funct5': getBits(binary, FIELDS.xwc_funct5.pos),
   };
 }
 
