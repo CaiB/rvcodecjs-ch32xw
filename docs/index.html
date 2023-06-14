@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rvcodec.js · RISC-V Instruction Encoder/Decoder</title>
+
+    <!-- Page properties -->
+    <meta name="author" content="LupLab @ UC Davis">
+    <meta name="description" content="RISC-V Instruction Encoder/Decoder">
+    <meta name="keywords" content="riscv, risc-v, instruction, decoder, encoder, converter">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+
+  <body>
+    <div id="title-container">
+      <div id="title-box">[ RISC-V Instruction Encoder/Decoder ] [ Now with CH32V003 custom XW extension support hacked in ]</div>
+    </div>
+
+    <div id="search-outer-container">
+      <div id="search-container">
+        <span class='offset-label'>[ Instruction ]</span>
+        <div id="search-input-wrapper">
+          <input id="search-placeholder">
+          <input type="text" name="input" id="search-input" autofocus autocomplete="off">
+        </div>
+        <button id="parameter-button"></button>
+        <div id="search-result-list" hidden></div>
+      </div>
+    </div>
+
+    <!-- Parameter container -->
+    <div id="modal-container">
+      <div id="parameter-container">
+        <span id="close">✔</span>
+        <div class="parameter-row">
+          <label class="switch">
+            <input type="checkbox" id="abi">
+            <span class="slider round"></span>
+          </label>
+          <label class="parameter-label" for="abi">ABI</label>
+        </div>
+        <div class="parameter-row">
+          <select id="isa" name="isa">
+          </select>
+          <label class="parameter-label" for="isa">ISA</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="results-outer-container">
+      <div id="results-container-box">
+        <span id='results-label' class='offset-label'>[ Conversion ]</span>
+        <div id="results-inner-container">
+          <div class="results-container-spacing"></div>
+          <div class="rows-container" id="valid-result">
+
+            <div class="result-row result-row-title">Assembly = </div>
+            <div class="result-row result-row-data">
+              <div id="asm-data"></div>
+              <button id="asm-copy" class="copy-button">
+                <span class="copy-tooltip">Copy</span>
+              </button>
+            </div>
+
+            <div class="result-row result-row-title">Binary = </div>
+            <div class="result-row result-row-data">
+              <div id="binary-data">
+              </div>
+              <button id="binary-copy" class="copy-button">
+                <span class="copy-tooltip">Copy</span>
+              </button>
+            </div>
+
+            <div class="result-row result-row-title">Hexadecimal = </div>
+            <div class="result-row result-row-data">
+              <div id="hex-data"></div>
+              <button id="hex-copy" class="copy-button">
+                <span class="copy-tooltip">Copy</span>
+              </button>
+            </div>
+
+
+            <div class="result-row result-row-title">Format = </div>
+            <div class="result-row result-row-data" id="fmt-data"></div>
+
+            <div class="result-row result-row-title">Instruction set = </div>
+            <div class="result-row result-row-data" id="isa-data"></div>
+          </div>
+
+          <div class="rows-container" id="error-container"></div>
+          <div class="results-container-spacing"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="copyright-container">
+        <div id="copyright-box">Copyright © 2021-2023 <a href="https://luplab.cs.ucdavis.edu/">LupLab</a> @ University of California, Davis<br/>This website and its components are licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU AGPLv3</a> License<br/>This particular fork has had CH32V003 <a href="https://github.com/CaiB/CH32V003-Architecture-Exploration">XW extension</a> support badly tacked on, and the <a href="https://github.com/CaiB/rvcodecjs-ch32xw">code is available here</a>.</div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+
+</html>

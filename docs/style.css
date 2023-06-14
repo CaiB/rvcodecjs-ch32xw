@@ -1,0 +1,525 @@
+/* Fonts importing */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap");
+
+:root {
+    /* Solarized colors */
+    --color-base03:  #002b36;
+    --color-base02:  #073642;
+    --color-base01:  #586e75;
+    --color-base00:  #657b83;
+    --color-base0:   #839496;
+    --color-base1:   #93a1a1;
+    --color-base2:   #eee8d5;
+    --color-base3:   #fdf6e3;
+
+    --color-yellow:  #b58900;
+    --color-orange:  #cb4b16;
+    --color-red:     #dc322f;
+    --color-magenta: #d33682;
+    --color-violet:  #6c71c4;
+    --color-blue:    #268bd2;
+    --color-cyan:    #2aa198;
+    --color-green:   #859900;
+}
+
+/* Light colorscheme by default */
+:root {
+    --color-fg: var(--color-base00);
+    --color-bg: var(--color-base3);
+    --color-hl: var(--color-base2);
+    --color-em: var(--color-base01);
+    --color-co: var(--color-base1);
+    --color-fd: var(--color-base2);
+}
+
+/* Dark colorscheme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-fg: var(--color-base0);
+        --color-bg: var(--color-base03);
+        --color-hl: var(--color-base02);
+        --color-em: var(--color-base1);
+        --color-co: var(--color-base01);
+        --color-fd: var(--color-base01);
+    }
+}
+
+::placeholder{
+    color: var(--color-fg);
+}
+
+::selection {
+    background-color: var(--color-hl);
+}
+
+::-moz-selection {
+    background-color: var(--color-hl);
+}
+
+/* Body */
+body {
+    font-size: 1rem; /* font size for serach input and displayed result*/
+    min-width: 265px; /* minimum screen width supported */
+    font-family: 'IBM Plex Mono', monospace;
+
+    height: 100vh;
+    margin: 0px;
+
+    display: grid;
+    grid-template-rows: 0.5fr minmax(4ch, 12vh) minmax(30ch, 10fr);
+    gap: 1ch;
+
+    color: var(--color-fg);
+    background-color: var(--color-bg);
+}
+
+/* Page title */
+#title-container{
+    margin: 1ch 1ch 0ch 1ch;
+    display: grid;
+}
+#title-box{
+    font-size: 0.875rem;
+}
+
+/* Page copyright */
+#copyright-container{
+    margin: 1ch 1ch 1ch 1ch;
+    display: grid;
+}
+#copyright-box{
+    font-size: 0.75rem;
+    color: var(--color-co);
+}
+
+/* Boxes */
+.offset-label{
+    font-size: 0.875rem;
+    position: absolute;
+    transform: translate(20%, -60%);
+
+    padding: 0% 0.25%;
+    background-color: var(--color-bg) ;
+}
+
+/* Search bar */
+#search-outer-container{
+    display: grid;
+
+    /* end: vertically bottomed, center: horizontally centered  */
+    place-content: end center;
+    grid-template-columns: minmax(20ch, 40ch);
+}
+
+#search-container{
+    margin: 0 1ch;
+    border: 1px solid var(--color-fg);
+    height: 3.5ch;
+    display: grid;
+    position: relative;
+    grid-template-columns: minmax(17ch, 37ch) 2ch 1ch;
+}
+
+#search-input-wrapper {
+    position: relative;
+    border: none;
+
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    background-color: transparent;
+    color: var(--color-em);
+    font-family: inherit;
+}
+
+#search-input {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding:0% 4% 0% 4%;
+
+    border: none;
+    background-color: transparent;
+
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+}
+
+#search-input:focus-visible {
+    outline:none;
+}
+
+/* Dyanimc placeholder */
+#search-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+
+    opacity: 0.5;
+    pointer-events: none;
+
+    /* Copied to match #search-input */
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0% 4% 0% 4%;
+    line-height: 3.5ch;
+    border: none;
+    background-color: transparent;
+}
+
+/* Search Choices */
+#search-result-list {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: -1px;
+
+    font-size: inherit;
+
+    border: 1px solid var(--color-fg);
+    background-color: var(--color-bg);
+
+    z-index: 5;
+}
+
+#search-result-list span {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+
+    cursor: pointer;
+
+    /* Copied to match #search-input */
+    padding: 0% 4% 0% 4%;
+}
+
+#search-result-list span:hover, #search-result-list span.selected {
+    background-color: var(--color-hl);
+}
+
+/* Result area */
+#results-outer-container{
+    display: grid;
+    place-content: center;
+
+    grid-template-columns: minmax(20ch, 80ch);
+    grid-template-rows: minmax(20ch, 50ch);
+}
+
+#results-container-box{
+    border: 1px solid var(--color-fg);
+    margin: 0ch 1ch 1ch 1ch;
+    /* Results are hidden by default and dynamically shown on search*/
+    display: none;
+}
+
+#results-inner-container{
+    height: 100%;
+
+    display: grid;
+    grid-auto-flow: row;
+
+    /* Adds 1fr spacing on top and bottom that shrinks to 0px on smaller
+     * viewports. */
+    grid-template-rows: minmax(0px, 2fr) 5fr minmax(0px, 2fr);
+}
+
+.rows-container{
+    display: grid;
+    align-items: stretch;
+    column-gap: 3ch;
+    row-gap: 1ch;
+
+    /* Labels (on left) will shrink when data needs more space */
+    grid-template-columns: minmax(0, 2fr) 5fr;
+}
+
+.result-row {
+    min-width: max-content;
+    height: 4ch;
+    display: grid;
+    place-content: center;
+}
+
+.result-row-title{
+    color: var(--color-co);
+    place-content: center end;
+}
+
+.result-row-data {
+    place-content: center start;
+    grid-template-columns: 4fr 0.15fr 0.05fr;
+}
+
+/* Binary representation */
+#binary-data {
+    height: fit-content;
+    width: max-content;
+    transition: background-color 400ms linear;
+}
+
+/* No separate between every 16 bits when the screen is wide */
+.binary-break {
+    display: none;
+}
+
+/* Break point for tablets and smaller*/
+@media (max-width: 768px) {
+    /* Set one column (either title or data) per row*/
+    .rows-container{
+        column-gap: 0;
+        row-gap: 0;
+        grid-template-columns: 100%;
+    }
+
+    .result-row {
+        height: 3ch;
+        place-content: center start;
+        padding: 0 15vw;
+    }
+
+    /* Bigger height for the row of binary data */
+    .result-row:nth-child(4) {
+        height: 5ch;
+    }
+
+    /* Create a gap between this data row and the title row of the next data */
+    .result-row-data {
+        margin-bottom: 0.75ch;
+        grid-template-columns: 4fr 0.2fr;
+    }
+
+    /* No gap for the last data */
+    .result-row-data:last-child {
+        margin-bottom: 0;
+    }
+
+    #error-row {
+        padding: 0 15vw;
+    }
+
+    #binary-data {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Separate between every 16 bits when the screen is smaller */
+    .binary-break {
+        display: block;
+    }
+}
+
+/* Break point for mobile phone*/
+@media (max-width: 480px) {
+    body {
+        font-size: 0.85rem;
+    }
+
+    #title-box{
+        font-size: 0.75rem;
+    }
+
+    #copyright-box{
+        font-size: 0.7rem;
+        color: var(--color-co);
+    }
+
+    .result-row {
+        padding: 0 5vw;
+    }
+
+    #error-row {
+        padding: 0 5vw;
+    }
+
+    #parameter-container {
+        max-width: 225px;
+    }
+}
+
+.binary-bit {
+    height: 0.9rem;
+
+    /* --bit-color defined dynamically by script */
+    color: var(--bit-color);
+    margin-right: 0.12rem;
+}
+
+/* Binary tooltip conversion */
+.binary-tooltip {
+    visibility: hidden;
+    width: max-content;
+    background-color: var(--color-fg);
+    color: var(--color-bg);
+    text-align: center;
+    border-radius: 5px;
+    padding: 3px;
+
+    /* Position the tooltip */
+    position: absolute;
+}
+
+/*css the copy-button and the row-data*/
+.copy-button {
+    margin: auto 0;
+    height: 1.5rem;
+    background-color: inherit;
+    border: none;
+    background: url("./assets/copy-icon.svg") no-repeat center;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.copy-button:active {
+    background: url("./assets/check-icon.svg") no-repeat center;
+}
+
+/*css the tooltip*/
+.copy-tooltip {
+    visibility: hidden;
+    width: 3rem;
+    background-color: var(--color-fg);
+    color: var(--color-bg);
+    text-align: center;
+    border-radius: 5px;
+    padding: 3px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: -200%;
+    margin-left: -50%;
+}
+
+.copy-button:hover .copy-tooltip {
+    visibility: visible;
+}
+
+.copy-button:active .copy-tooltip {
+    visibility: hidden;
+}
+
+/* Parameter container */
+#parameter-button {
+    background-color: inherit;
+    border: none;
+    background: url("./assets/gear-icon.svg") no-repeat center;
+    cursor: pointer;
+}
+
+#modal-container {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    padding-top: 18vh;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#parameter-container {
+    position: relative;
+    opacity: 1;
+    background-color: var(--color-bg);
+    margin: auto;
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+}
+
+.parameter-row {
+    display: grid;
+    height: 50%;
+    grid-template-columns: 7ch 8ch;
+    margin: 10px;
+}
+
+.parameter-label {
+    margin: 0% 15%;
+}
+
+/* Close button */
+#close {
+    color: var(--color-em);
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 25px;
+}
+
+#close:hover {
+    color: var(--color-yellow);
+    cursor: pointer;
+}
+
+/* Toggle button */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-fg);
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 2px;
+    background-color: var(--color-bg);
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: var(--color-yellow);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-yellow);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(21px);
+    -ms-transform: translateX(21px);
+    transform: translateX(21px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 16px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
