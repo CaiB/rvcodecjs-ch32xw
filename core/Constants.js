@@ -522,6 +522,12 @@ export const ISA_Q = {
 
 // C instruction set
 export const ISA_C = {
+  // CH32V003 Custom XW extension
+  'xw.c.lbu': { isa: 'XW', xlens: 0b001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
+  'xw.c.sb':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[0,[4,3]], [[2,1]]], opcode: C_OPCODE.C0 },
+  'xw.c.lhu': { isa: 'XW', xlens: 0x001, fmt: 'CL-type', funct3: '001', uimm: true, immBits: [[1,[5,4]], [[3,2]]], opcode: C_OPCODE.C2 },
+  'xw.c.sh':  { isa: 'XW', xlens: 0x001, fmt: 'CS-type', funct3: '101', uimm: true, immBits: [[1,[5,4]], [[3,2]]], opcode: C_OPCODE.C2 },
+
 // Load and Store Instructions
   // Stack-Pointer Based Loads and Stores
   'c.lwsp':   { isa: 'C',  xlens: 0b111, fmt: 'CI-type', funct3: '010', rdRs1Mask: 0b10, rdRs1Excl: [0], uimm: true, immBits: [[5], [[4,2],[7,6]]], opcode: C_OPCODE.C2 },
@@ -986,10 +992,12 @@ function xlenLookupGen(...instNames) {
 // - xlen
 export const ISA_C0 = {
   [ISA_C['c.addi4spn'].funct3]: 'c.addi4spn',
-  [ISA_C['c.fld'].funct3]:  xlenLookupGen('c.fld', 'c.lq'),
+  [ISA_C['xw.c.lbu'].funct3]: 'xw.c.lbu',
+  [ISA_C['xw.c.sb'].funct3]: 'xw.c.sb',
+  //[ISA_C['c.fld'].funct3]:  xlenLookupGen('c.fld', 'c.lq'),
   [ISA_C['c.lw'].funct3]:   'c.lw',
   [ISA_C['c.flw'].funct3]:  xlenLookupGen('c.flw', 'c.ld'),
-  [ISA_C['c.fsd'].funct3]:  xlenLookupGen('c.fsd', 'c.sq'),
+  //[ISA_C['c.fsd'].funct3]:  xlenLookupGen('c.fsd', 'c.sq'),
   [ISA_C['c.sw'].funct3]:   'c.sw',
   [ISA_C['c.fsw'].funct3]:  xlenLookupGen('c.fsw', 'c.sd'),
 }
@@ -1036,8 +1044,10 @@ export const ISA_C1 = {
 // - rs2Val
 // - rdRs1Val
 export const ISA_C2 = {
+  [ISA_C['xw.c.lhu'].funct3]: 'xw.c.lhu',
+  [ISA_C['xw.c.sh'].funct3]: 'xw.c.sh',
   [ISA_C['c.slli'].funct3]:   'c.slli',
-  [ISA_C['c.fldsp'].funct3]:  xlenLookupGen('c.fldsp', 'c.lqsp'),
+  //[ISA_C['c.fldsp'].funct3]:  xlenLookupGen('c.fldsp', 'c.lqsp'),
   [ISA_C['c.lwsp'].funct3]:   'c.lwsp',
   [ISA_C['c.flwsp'].funct3]:  xlenLookupGen('c.flwsp', 'c.ldsp'),
   [ISA_C['c.jr'].funct4.substring(0,3)]: { [XLEN_MASK.all]: {
@@ -1053,7 +1063,7 @@ export const ISA_C2 = {
                        'default':   'c.add',
     },
   }},
-  [ISA_C['c.fsdsp'].funct3]:  xlenLookupGen('c.fsdsp', 'c.sqsp'),
+  //[ISA_C['c.fsdsp'].funct3]:  xlenLookupGen('c.fsdsp', 'c.sqsp'),
   [ISA_C['c.swsp'].funct3]:   'c.swsp',
   [ISA_C['c.fswsp'].funct3]:  xlenLookupGen('c.fswsp', 'c.sdsp'),
 }
