@@ -21,10 +21,11 @@ jobs:
       
       - name: Update file layout
         run: |
-          cp -r web-ui/* .
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./main.js
-          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./completion.js
-          rm -rf web-ui
+          mkdir public
+          cp -r core public
+          cp -r web-ui/* public
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./public/main.js
+          sed -i -e 's/\.\.\/core\//\.\/core\//g' ./public/completion.js
     
       - name: Commit back to repository
         uses: stefanzweifel/git-auto-commit-action@v4
