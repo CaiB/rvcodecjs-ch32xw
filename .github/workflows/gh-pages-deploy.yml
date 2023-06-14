@@ -3,7 +3,7 @@ name: CI - Deploy to GitHub Pages
 on:
   push:
     branches:
-      - pr-gh-pages-ci
+      - main
 
 # note: this could be done better in any number of ways
 jobs:
